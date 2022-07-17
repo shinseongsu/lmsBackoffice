@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zerobase.fastlms.admin.mapper.MemberMapper">
+
+    <sql id="selectListWhere">
+        <if test="searchType != null and searchValue != null">
+            <choose>
+                <when test="searchType == 'userId'">
+                    and A.user_id like concat('%', #{searchValue}, '%')
+                </when>
+                <when test="searchType == 'userName'">
+                    and A.user_name like concat('%', #{searchValue}, '%')
+                </when>
+                <when test="searchType == 'phone'">
+                    and A.phone like concat('%', #{searchValue}, '%')
+                </when>
+                <otherwise>
+                    and
+                    (
+                    A.user_id like concat('%', #{searchValue}, '%')
+                    or
+                    A.user_name like concat('%', #{searchValue}, '%')
+                    or
+                    A.phone like concat('%', #{searchValue}, '%')
+                    )
+                </otherwise>
+            </choose>
+        </if>
+
+    </sql>
+
+    <select id="selectListCount" resultType="long">
+        select count(*)
+        from member A
+        where 1 = 1
+            <include refid="selectListWhere"/>
+    </select>
+
+    <select id="selectList" resultType="com.zerobase.fastlms.admin.dto.MemberDto">
+        select A.user_id
+             , A.addr
+             , A.addr_detail
+             , A.admin_yn
+             , A.email_auth_dt
+             , A.email_auth_key
+             , A.email_auth_yn
+             , A.password
+             , A.phone
+             , A.reg_dt
+             , A.reset_password_key
+             , A.reset_password_limit_dt
+             , A.udt_dt
+             , A.user_name
+             , A.user_status
+             , A.zipcode
+             , B.last_success_date
+        from member A
+        LEFT JOIN ( select user_id
+                         , MAX(success_date) as last_success_date
+                      from login_history
+                     group by user_id ) B
+               ON A.user_id  = B.user_id
+        where 1 = 1
+            <include refid="selectListWhere"/>
+
+        limit #{pageStart}, #{pageEnd}
+    </select>
+
+</mapper>
