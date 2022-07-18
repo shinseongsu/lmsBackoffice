@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -84,10 +84,11 @@ public class BannerService {
     }
 
     @Transactional
-    public void delete(String[] chk, String[] id) {
-        for(int i = 0 ; i < chk.length; i++) {
-            log.info(chk[i] + ",,," + id[i]);
-        }
+    public void delete(Map<String, Object> params) {
+        List<String> list = (ArrayList<String>) params.get("ids");
+
+        list.stream().forEach(x -> bannerRepository.deleteById(Long.valueOf(x)));
+
     }
 
 }

@@ -63,7 +63,7 @@
             <thead>
             <tr>
                 <th>
-                    <input type="checkbox">
+                    <input id="top_check" type="checkbox">
                 </th>
                 <th>
                     No
@@ -81,9 +81,9 @@
             </thead>
             <tbody>
             <tr th:each="x : ${bannerList}">
-                <input type="hidden" name="no" id="no" th:value="${x.no}"/>
+                <input type="hidden" name="no" id="no" class="no" th:value="${x.no}"/>
                 <td>
-                    <input name="chk" id="chk" type="checkbox">
+                    <input name="chk" id="chk" class="chk" type="checkbox">
                 </td>
                 <td th:text="${x.no}">1</td>
                 <td>
@@ -108,12 +108,43 @@
 
     <script>
         const $delete = document.getElementById('delete');
-        const $form = document.getElementById('form');
+        const $topCheck = document.getElementById('top_check');
+        const chk = document.getElementsByClassName("chk");
+        const no = document.getElementsByClassName("no");
+
+        $topCheck.addEventListener('click', (event) => {
+            let checked = $topCheck.checked;
+
+            for(let i = 0 ; i < chk.length ; i++) {
+                chk[i].checked = checked;
+            }
+        });
 
         $delete.addEventListener('click', (event) => {
             event.preventDefault();
 
-            $form.submit();
+
+            let arr = [];
+
+            for(let i = 0 ; i < chk.length ; i++) {
+                if(chk[i].checked) {
+                    arr.push(no[i].value);
+                }
+            }
+            console.log(arr);
+
+            fetch('/admin/banner/delete.do', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    ids : arr
+                })
+            }).then((response) => {
+                location.href = '/admin/banner/main.do';
+            })
+
         });
     </script>
 

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -74,13 +76,11 @@ public class AdminBannerController {
     }
 
     @PostMapping("/delete.do")
-    public String delete(HttpServletRequest request, Model model) {
-        String[] chk = request.getParameterValues("chk");
-        String[] id = request.getParameterValues("no");
+    public ResponseEntity<?> delete(@RequestBody Map<String, Object> request, Model model) {
 
-        bannerService.delete(chk, id);
+        bannerService.delete(request);
 
-        return "redirect:/admin/banner/main.do";
+        return ResponseEntity.ok().body("");
     }
 
 
