@@ -30,7 +30,7 @@ public class AdminBannerController {
     public String main(Model model, Pageable pageable) {
         Page<BannerDto> bannerList = bannerService.findAllByOrderByIdAsc(pageable);
 
-        long totalCount = bannerList.getTotalPages();
+        long totalCount = bannerList.getContent().size();
         int pageIndex = pageable.getPageNumber();
         String pagerHtml = getPaperHtml(totalCount, pageable.getPageSize(), pageIndex);
 
