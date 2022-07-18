@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 화면</title>
+    <style>
+        .list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .list table th, .list table td {
+            border:solid 1px #000;
+        }
+
+        .search-form {
+            width: 100%;
+            position: relative;
+            padding: 5px 0 10px 0;
+            display: flex;
+        }
+        .link_button {
+            text-align: left;
+        }
+
+        .search-form .total-count {
+            position: absolute;
+            left: 0; top: 0;
+            height: 20px;
+            text-align: right;
+        }
+
+        .pager {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .pager a.on {
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="/fragments/layout.html :: fragment-admin-body-menu"></div>
+<h1>배너 관리 - 배너 수정</h1>
+
+<div class="table">
+    <form id="form" action="/admin/banner/update.do" method="POST" enctype="multipart/form-data" th:object="${bannerInfo}" >
+        <table>
+            <input type="hidden" th:field="*{id}">
+            <tr>
+                <th>배너명</th>
+                <td>
+                    <input th:field="*{name}" name="name" type="text" placeholder="배너명 입력" />
+                </td>
+            </tr>
+            <tr>
+                <th>배너 파일</th>
+                <td>
+                    <input th:field="*{file}" name="file" type="file">
+                </td>
+            </tr>
+            <tr>
+                <th>링크 주소</th>
+                <td>
+                    <input th:field="*{url}" name="url" type="text" placeholder="링크 주소 입력" />
+                </td>
+            </tr>
+            <tr>
+                <th>오픈 방법</th>
+                <td>
+                    <select th:field="*{openType}" name="openType" id="openType" disabled>
+                        <option value="">오픈 방법 선택</option>
+                        <option value="FILE">FILE</option>
+                        <option value="LINK">LINK</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>정렬 순서</th>
+                <td>
+                    <input th:field="*{orderNumber}" name="orderNumber" type="text" placeholder="정렬 순서 입력" />
+                </td>
+            </tr>
+            <tr>
+                <th>공개 여부</th>
+                <td>
+                    <input th:field="*{hide}" name="hide" type="checkbox"> 공개
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div>
+    <a id="update" href="/">배너 수정하기</a>
+    |
+    <a href="/admin/banner/main.do">목록 이동</a>
+</div>
+
+<script>
+        const $update = document.getElementById('update');
+        const $form = document.getElementById('form');
+
+        $update.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            $form.submit();
+        })
+    </script>
+
+</body>
+</html>

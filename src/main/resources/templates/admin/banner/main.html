@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 화면</title>
+    <style>
+        .list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .list table th, .list table td {
+            border:solid 1px #000;
+        }
+
+        .search-form {
+            width: 100%;
+            position: relative;
+            padding: 5px 0 10px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .link_button {
+            text-align: left;
+        }
+
+        .pager {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .pager a.on {
+            font-weight: bold;
+            color: red;
+        }
+
+        .img {
+            width: 100px;
+            height: 100px;
+        }
+        .count_wrapper {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="/fragments/layout.html :: fragment-admin-body-menu"></div>
+<h1>배너 관리</h1>
+
+<div class="list">
+
+    <div class="search-form">
+        <div class="link_button">
+            <a href="/admin/banner/add.do">배너 등록</a>
+            |
+            <a id="delete" href="/admin/banner/delete.do">배너 삭제</a>
+        </div>
+        <div class="count_wrapper">
+            <p class="total-count">전체 <span th:text="${totalCount}"></span>개</p>
+        </div>
+    </div>
+
+    <form id="form" action="/admin/banner/delete.do" method="post" enctype="multipart/form-data">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    <input type="checkbox">
+                </th>
+                <th>
+                    No
+                </th>
+                <th>
+                    배너명
+                </th>
+                <th>
+                    이미지
+                </th>
+                <th>
+                    등록일
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="x : ${bannerList}">
+                <input type="hidden" name="no" id="no" th:value="${x.no}"/>
+                <td>
+                    <input name="chk" id="chk" type="checkbox">
+                </td>
+                <td th:text="${x.no}">1</td>
+                <td>
+                    <a th:href="@{/admin/banner/detail.do(id=${x.no})}" th:text="${x.name}">메인배너1</a>
+                </td>
+                <td>
+                    <img class="img" th:src="${x.url}" th:alt="${x.name}">
+                </td>
+                <td th:text="${#temporals.format(x.createDate,'yyyy-MM-dd HH:mm')}">2022.01.01 12:00</td>
+            </tr>
+            </tbody>
+
+        </table>
+    </form>
+
+
+    <div class="pager" th:utext="${pager}">
+    </div>
+
+
+</div>
+
+    <script>
+        const $delete = document.getElementById('delete');
+        const $form = document.getElementById('form');
+
+        $delete.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            $form.submit();
+        });
+    </script>
+
+</body>
+</html>

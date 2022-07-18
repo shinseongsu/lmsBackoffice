@@ -1,10 +1,13 @@
 spring:
-  datasource:
-    url: jdbc:mariadb://localhost:3306/minicampus
-    driver-class-name: org.mariadb.jdbc.Driver
-    username: root
-    password: '0000'
-  
+  devtools:
+    livereload:
+      enabled: true
+  thymeleaf:
+    cache: false
+
+  profiles:
+    active: dev
+
   jpa:
     generate-ddl: true
     hibernate:
@@ -32,3 +35,7 @@ mybatis:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+
+file:
+  upload:
+    path: /Users/mac/Downloads/학습관리시스템_프로젝트_시작소스_fastlms3/fastlms3/src/main/resources/static/images/
